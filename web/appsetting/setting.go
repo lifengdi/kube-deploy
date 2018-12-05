@@ -1,9 +1,9 @@
 package appsetting
 
 import (
-	"time"
-	"log"
 	"github.com/go-ini/ini"
+	"log"
+	"time"
 )
 
 type Server struct {
@@ -30,7 +30,6 @@ func Setup() {
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
 }
-
 
 func mapTo(section string, v interface{}) {
 	err := cfg.Section(section).MapTo(v)

@@ -3,12 +3,12 @@ package main
 import (
 	"b2c-deploy/web/appsetting"
 	"b2c-deploy/web/routers"
-	"runtime"
-	"net/http"
+	"fmt"
 	"github.com/fvbock/endless"
 	"log"
+	"net/http"
+	"runtime"
 	"syscall"
-	"fmt"
 )
 
 func main() {
