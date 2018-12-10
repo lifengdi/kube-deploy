@@ -1,26 +1,27 @@
 package main
 
 import (
-	"b2c-deploy/web/appsetting"
+	"b2c-deploy/web/setting"
 	"b2c-deploy/web/routers"
 	"fmt"
-	"github.com/fvbock/endless"
 	"log"
 	"net/http"
 	"runtime"
 	"syscall"
+
+	"github.com/fvbock/endless"
 )
 
 func main() {
-
+	fmt.Println("1111")
 	//初始化配置文件
-	appsetting.Setup()
+	setting.Setup()
 	//初始化路由表
 	routersInit := routers.InitRouter()
 
-	readTimeout := appsetting.ServerSetting.ReadTimeout
-	writeTimeout := appsetting.ServerSetting.WriteTimeout
-	endPoint := fmt.Sprintf(":%d", appsetting.ServerSetting.HttpPort)
+	readTimeout := setting.ServerSetting.ReadTimeout
+	writeTimeout := setting.ServerSetting.WriteTimeout
+	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
 	maxHeaderBytes := 1 << 20
 
 	if runtime.GOOS == "windows" {

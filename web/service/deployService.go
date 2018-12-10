@@ -1,11 +1,36 @@
 package service
 
-type Demo struct {
-	SourceId   string
-	UserId     string
-}
+import (
+	"k8s.io/client-go/kubernetes"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	apiv1 "k8s.io/api/core/v1"
+	"b2c-deploy/web/reqBody"
+	"fmt"
+	"k8s.io/apimachinery/pkg/util/intstr"
+)
 
-func (d *Demo) GetDemo() (string,error) {
-	println("i am deploy service")
-	return "hello",nil
+
+/**
+	创建service
+ */
+func createService(clientset *kubernetes.Clientset,request reqBody.CreateRequest) error {
+	fmt.Println("createService")
+	_, err:= clientset.CoreV1().Services("default").Create(&apiv1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: request.ServiceName,
+		},
+		Spec: apiv1.ServiceSpec{
+			Type:     apiv1.ServiceTypeClusterIP,
+			Selector: map[string]string{
+				"app": request.ServiceName,
+			},
+			Ports: []apiv1.ServicePort{
+				{
+					Port: request.Port,
+					TargetPort: intstr.FromInt(request.TargetPort),
+				},
+			},
+		},
+	})
+	return err
 }
