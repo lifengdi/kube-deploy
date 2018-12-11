@@ -13,9 +13,9 @@ import (
 /**
 	创建service
  */
-func createService(clientset *kubernetes.Clientset,request reqBody.CreateRequest) error {
+func createService(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
 	fmt.Println("createService")
-	_, err:= clientset.CoreV1().Services("default").Create(&apiv1.Service{
+	_, err:= clientset.CoreV1().Services(request.Namespace).Create(&apiv1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: request.ServiceName,
 		},
@@ -33,4 +33,14 @@ func createService(clientset *kubernetes.Clientset,request reqBody.CreateRequest
 		},
 	})
 	return err
+}
+
+func deleteService(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
+
+	deletePolicy := metav1.DeletePropagationForeground
+
+	err:=clientset.CoreV1().Services(request.Namespace).Delete(request.ServiceName,&metav1.DeleteOptions{
+		PropagationPolicy: &deletePolicy,
+	})
+	return err;
 }

@@ -22,9 +22,9 @@ func InitRouter() *gin.Engine {
 	deploys := r.Group("/deploy")
 
 	{
-		deploys.POST("/service",service.Create)
-		deploys.DELETE("/service")
-		deploys.PUT("/service")
+		deploys.POST("/service",service.CreateService)
+		deploys.DELETE("/service",service.DeleteService)
+		deploys.PUT("/service",service.UpdateService)
 	}
 
 	return r

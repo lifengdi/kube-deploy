@@ -9,16 +9,47 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	apiv1 "k8s.io/api/core/v1"
 )
+func createDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
 
-func createDeployment(clientset *kubernetes.Clientset,request reqBody.CreateRequest) error {
+
+	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 
 
-	deploymentsClient := clientset.AppsV1beta1().Deployments(apiv1.NamespaceDefault)
 
+	fmt.Println("Creating deployment...")
+	_, err := deploymentsClient.Create(getDeployment(request))
+
+	return err;
+}
+
+
+func deleteDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
+	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
+
+	deletePolicy := metav1.DeletePropagationForeground
+
+	err := deploymentsClient.Delete(request.ServiceName,&metav1.DeleteOptions{
+		PropagationPolicy: &deletePolicy,
+	});
+
+	return err;
+}
+
+func updateDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
+	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
+	_,err := deploymentsClient.Update(getDeployment(request))
+	return err;
+}
+
+
+func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 	var r apiv1.ResourceRequirements
 	//资源分配会遇到无法设置值的问题，故采用json反解析
 	//j := `{"limits": {"cpu":"2000m", "memory": "1Gi"}, "requests": {"cpu":"2000m", "memory": "1Gi"}}`
-	j := `{"limits": {"cpu":"0.1", "memory": "32Mi"}, "requests": {"cpu":"0.1", "memory": "32Mi"}}`
+	j := `{"limits": {"cpu":"`+request.LimitCpu+`", "memory": "`+request.LimitMemory+`"}, "requests": {"cpu":"`+request.RequestCpu+`", "memory": "`+request.RequestMemory+`"}}`
+
+	println(j)
+
 	json.Unmarshal([]byte(j), &r)
 	deployment := &appsv1beta1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -28,7 +59,7 @@ func createDeployment(clientset *kubernetes.Clientset,request reqBody.CreateRequ
 			},
 		},
 		Spec: appsv1beta1.DeploymentSpec{
-			Replicas: int32Ptr2(1),
+			Replicas: int32Ptr2(request.InstanceNum),
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
@@ -46,9 +77,5 @@ func createDeployment(clientset *kubernetes.Clientset,request reqBody.CreateRequ
 			},
 		},
 	}
-
-	fmt.Println("Creating deployment...")
-	_, err := deploymentsClient.Create(deployment)
-
-	return err;
+	return deployment;
 }

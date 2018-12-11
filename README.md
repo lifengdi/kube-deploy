@@ -8,5 +8,6 @@
 * 更新服务
 * 重启服务
 * 更改服务实例数量
+* watch deployment
 
 

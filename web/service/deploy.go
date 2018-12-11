@@ -2,40 +2,68 @@ package service
 
 import (
 	"b2c-deploy/web/reqBody"
-	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/kubernetes"
 )
 
-func Create(request reqBody.CreateRequest)(string,error){
+func Create(request reqBody.ServiceRequest)(string,error){
 	println(request.Image)
 
-	var kubeconfig *string = getKubeConfig("")
 
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	if err != nil {
-		panic(err.Error())
+	clientset,err := getClientset("taoche-test")
+	if err!=nil{
+		//panic(err.Error())
+		return "false",err;
 	}
-	// creates the clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
+	//删除服务，忽略异常
+	Delete(request)
 
 	err = createDeployment(clientset,request);
 	if err != nil {
-		panic(err.Error())
+		//panic(err.Error())
+		return "false",err
 	}
 	err = createService(clientset,request);
 	if err != nil {
-		panic(err.Error())
+		//panic(err.Error())
+		return "false",err
 	}
-
-
-	return "ok",nil
+	return "true",nil
 }
 
 
+func Delete(request reqBody.ServiceRequest)(string,error){
 
-func int32Ptr2(i int32) *int32 { return &i }
+	clientset,err := getClientset(request.KubeType)
+	if err!=nil{
+		//panic(err.Error())
+		return "false",err;
+	}
+	err = deleteDeployment(clientset,request);
+	if err != nil {
+		//panic(err.Error())
+		return "false",err
+	}
+	err = deleteService(clientset,request);
+	if err != nil {
+		//panic(err.Error())
+		return "false",err
+	}
+	return "true",nil
+}
+
+
+func Update(request reqBody.ServiceRequest)(string,error){
+	clientset,err := getClientset(request.KubeType)
+	if err!=nil{
+		//panic(err.Error())
+		return "false",err;
+	}
+	err = updateDeployment(clientset,request)
+	if err!=nil{
+		//panic(err.Error())
+		return "false",err;
+	}
+	return "true",nil
+}
+
 
 

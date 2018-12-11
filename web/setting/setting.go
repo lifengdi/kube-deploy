@@ -20,7 +20,7 @@ var cfg *ini.File
 func Setup() {
 
 	var err error
-	cfg, err = ini.Load("web/config/app.ini")
+	cfg, err = ini.Load("web/resource/app.ini")
 	if err != nil {
 		log.Fatalf("Fail to parse 'web/appconfig/app.ini': %v", err)
 	}
