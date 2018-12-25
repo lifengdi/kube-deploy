@@ -13,6 +13,8 @@ type ServiceRequest struct {
 	LimitMemory string
 	RequestCpu string
 	RequestMemory string
+	Env map[string]string
+	Nodes map[string]string
 }
 
 func InitServiceRequest()ServiceRequest{
@@ -21,10 +23,12 @@ func InitServiceRequest()ServiceRequest{
 	request.TargetPort=8080
 	request.Namespace="default"
 	request.InstanceNum= 1
-	request.KubeType="taoche-test"
+	request.KubeType="test"
 	request.RequestCpu= "0.2"
 	request.LimitCpu="1"
 	request.RequestMemory="1Gi"
 	request.LimitMemory="2Gi"
+	request.Env = map[string] string{}
+	request.Nodes = map[string] string{}
 	return request
 }

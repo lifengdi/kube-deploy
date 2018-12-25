@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"b2c-deploy/web/api/service"
+	"kube-deploy/web/api/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +25,7 @@ func InitRouter() *gin.Engine {
 		deploys.POST("/service",service.CreateService)
 		deploys.DELETE("/service",service.DeleteService)
 		deploys.PUT("/service",service.UpdateService)
+		deploys.PATCH("/service",service.Restart)
 	}
 
 	return r

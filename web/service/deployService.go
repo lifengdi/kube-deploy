@@ -4,7 +4,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	apiv1 "k8s.io/api/core/v1"
-	"b2c-deploy/web/reqBody"
+	"kube-deploy/web/reqBody"
 	"fmt"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )

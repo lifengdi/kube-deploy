@@ -1,19 +1,22 @@
 package main
 
 import (
-	"b2c-deploy/web/setting"
-	"b2c-deploy/web/routers"
+	"kube-deploy/web/setting"
+	"kube-deploy/web/routers"
 	"fmt"
 	"log"
 	"net/http"
 	"runtime"
 	"syscall"
-
 	"github.com/fvbock/endless"
+	"flag"
+	"kube-deploy/web/config"
 )
 
 func main() {
-	fmt.Println("1111")
+
+	initConf();
+
 	//初始化配置文件
 	setting.Setup()
 	//初始化路由表
@@ -49,4 +52,20 @@ func main() {
 	if err != nil {
 		log.Printf("Server err: %v", err)
 	}
+}
+
+
+func initConf(){
+	var kubeConfs string
+	var appConf string
+	var imagePullSecrets string
+
+	flag.StringVar(&kubeConfs, "kubeconfs", "/Users/liukai/go/src/kube-deploy/web/resource/", "kubeconfs dir")
+	flag.StringVar(&appConf, "f", "/Users/liukai/go/src/kube-deploy/web/resource/app.ini", "app.ini path")
+	flag.StringVar(&imagePullSecrets, "imagePullSecrets", "tencent-registry,kanche-registry", "docker image pull secret")
+
+	flag.Parse()
+	config.Set("appConf",appConf)
+	config.Set("kubeConfs",kubeConfs)
+	config.Set("imagePullSecrets",imagePullSecrets)
 }

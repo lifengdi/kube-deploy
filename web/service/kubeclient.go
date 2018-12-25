@@ -1,14 +1,12 @@
 package service
 
 import (
-	"path/filepath"
-	"flag"
 	"os"
 	"fmt"
 	"k8s.io/client-go/tools/clientcmd"
 	restclient "k8s.io/client-go/rest"
-
 	"k8s.io/client-go/kubernetes"
+	"kube-deploy/web/config"
 )
 
 var configMap map[string]string = map[string]string{}
@@ -48,17 +46,17 @@ func getKubeConfig(configType string) *string{
 		config := configMap[configType]
 		return &config;
 	}
-	var kubeconfig *string
-	if home := homeDir(); home != "" {
-		configName := configType
-		configName = configName + "-kubeconfig"
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, "/src/b2c-deploy/web/resource", configName), "(optional) absolute path to the taoche-test-kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "../config", "absolute path to the taoche-test-kubeconfig file")
-	}
-	flag.Parse()
-	configMap[configType] = *kubeconfig;
-	return kubeconfig;
+	//var kubeconfig *string
+	configName := configType
+	configName = configName + "-kubeconfig"
+	//kubeconfig = flag.String("kubeconfig", filepath.Join(home, "/src/kube-deploy/web/resource", configName), "(optional) absolute path to the taoche-test-kubeconfig file")
+	//kubeconfig = flag.String("kubeconfig", filepath.Join(config.Get("kubeconfs"), configName), "(optional) absolute path to the taoche-test-kubeconfig file")
+	//println(kubeconfig)
+	//flag.Parse()
+	kubeconfig := config.Get("kubeConfs")+configName
+	configMap[configType] = kubeconfig;
+	println("--------------"+kubeconfig)
+	return &kubeconfig;
 }
 
 /**

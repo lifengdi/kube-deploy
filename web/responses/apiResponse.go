@@ -2,7 +2,7 @@ package responses
 
 import (
 	"github.com/gin-gonic/gin"
-	"b2c-deploy/web/exceptions"
+	"kube-deploy/web/exceptions"
 )
 
 type Gin struct {

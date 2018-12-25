@@ -4,6 +4,7 @@ import (
 	"github.com/go-ini/ini"
 	"log"
 	"time"
+	"kube-deploy/web/config"
 )
 
 type Server struct {
@@ -20,9 +21,9 @@ var cfg *ini.File
 func Setup() {
 
 	var err error
-	cfg, err = ini.Load("web/resource/app.ini")
+	cfg, err = ini.Load(config.Get("appConf"))
 	if err != nil {
-		log.Fatalf("Fail to parse 'web/appconfig/app.ini': %v", err)
+		log.Fatalf("Fail to parse 'app.ini': %v", err)
 	}
 
 	mapTo("server", ServerSetting)
