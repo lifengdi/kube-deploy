@@ -26,6 +26,7 @@ func InitRouter() *gin.Engine {
 		deploys.DELETE("/service",service.DeleteService)
 		deploys.PUT("/service",service.UpdateService)
 		deploys.PATCH("/service",service.Restart)
+		deploys.OPTIONS("/service",service.Get)
 	}
 
 	return r

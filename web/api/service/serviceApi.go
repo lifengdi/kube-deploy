@@ -129,3 +129,25 @@ func Restart(c *gin.Context){
 	}
 	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
 }
+
+func Get(c *gin.Context){
+	req := reqBody.InitServiceRequest()
+	if err := c.ShouldBindJSON(&req); err != nil {
+		logger.Error("响应失败")
+		return
+	}
+	resp := responses.Gin{C: c}
+
+	if req.ServiceName == ""{
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		return
+	}
+
+	result,err:=service.Get(req);
+	if err != nil {
+		logger.Error(err.Error())
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		return
+	}
+	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
+}

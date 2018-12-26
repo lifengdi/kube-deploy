@@ -4,6 +4,7 @@ import (
 	"kube-deploy/web/reqBody"
 
 	"errors"
+	"kube-deploy/web/responses"
 )
 
 func Create(request reqBody.ServiceRequest)(string,error){
@@ -88,18 +89,27 @@ func Restart(request reqBody.ServiceRequest)(string,error){
 }
 
 
-func Get(request reqBody.ServiceRequest)(string,error){
+func Get(request reqBody.ServiceRequest)(responses.DeploymentResp,error){
+	result := responses.DeploymentResp{}
+
 	clientset,err := getClientset(request.KubeType)
 	if err!=nil{
 		//panic(err.Error())
-		return "false",err;
+		return result,err;
 	}
-	_,err = getK8sDeployment(clientset,request)
+	deployment,err := getK8sDeployment(clientset,request)
 	if err!=nil{
 		//panic(err.Error())
-		return "false",err;
+		return result,err;
 	}
-	return "",nil
+
+	result.ServiceName = deployment.Name
+	result.Namespace = deployment.Namespace
+	result.InstanceNum = *deployment.Spec.Replicas
+	result.Image = deployment.Spec.Template.Spec.Containers[0].Image
+	result.Running = result.InstanceNum == deployment.Status.AvailableReplicas
+
+	return result,nil
 }
 
 
