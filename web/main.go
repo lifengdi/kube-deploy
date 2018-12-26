@@ -65,7 +65,7 @@ func initConf(){
 	flag.StringVar(&kubeConfs, "kubeconfs", "/Users/liukai/go/src/kube-deploy/web/resource/", "kubeconfs dir")
 	flag.StringVar(&appConf, "f", "/Users/liukai/go/src/kube-deploy/web/resource/app.ini", "app.ini path")
 	flag.StringVar(&imagePullSecrets, "imagePullSecrets", "tencent-registry,kanche-registry", "docker image pull secret")
-	flag.StringVar(&log, "log", "/var/log/kubebernetes/kube-deploy/", "log dir")
+	flag.StringVar(&log, "log", "/var/log/kubebernetes/", "log dir")
 
 	println("imagePullSecrets:"+imagePullSecrets)
 	flag.Parse()

@@ -35,7 +35,7 @@ func initLog() {
 	if !strings.HasSuffix(LogDir, "/"){
 		LogDir =LogDir+"/"
 	}
-	file, err := os.OpenFile(LogDir+fileName+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(LogDir+"logger-"+fileName+".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Failed to open error log file:", err)
 	}
