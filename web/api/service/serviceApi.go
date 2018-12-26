@@ -31,11 +31,11 @@ func CreateService(c *gin.Context)  {
 	resp := responses.Gin{C: c}
 
 	if req.Image == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "镜像不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR,"镜像不能为空",nil )
 		return
 	}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空",nil)
 		return
 	}
 	println(req.Namespace)
@@ -43,10 +43,10 @@ func CreateService(c *gin.Context)  {
 	_,err := service.Create(req)
 	if err != nil {
 		logger.Error(err.Error())
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		resp.Response(http.StatusOK, exceptions.ERROR, err.Error(),nil)
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, "SUCCESS")
+	resp.Response(http.StatusOK, exceptions.SUCCESS, "SUCCESS",nil)
 
 }
 
@@ -58,7 +58,7 @@ func DeleteService(c *gin.Context){
 	}
 	resp := responses.Gin{C: c}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空",nil)
 		return
 	}
 
@@ -66,10 +66,10 @@ func DeleteService(c *gin.Context){
 
 	if err != nil {
 		logger.Error(err.Error())
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		resp.Response(http.StatusOK, exceptions.ERROR, err.Error(),nil)
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
+	resp.Response(http.StatusOK, exceptions.SUCCESS, result,nil)
 }
 
 
@@ -90,21 +90,21 @@ func UpdateService(c *gin.Context){
 	}
 	resp := responses.Gin{C: c}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空",nil)
 		return
 	}
 	if req.Image == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "镜像不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "镜像不能为空",nil)
 		return
 	}
 	result,err:=service.Update(req);
 
 	if err != nil {
 		logger.Error(err.Error())
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		resp.Response(http.StatusOK, exceptions.ERROR, err.Error(),nil)
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
+	resp.Response(http.StatusOK, exceptions.SUCCESS, result,nil)
 }
 
 func Restart(c *gin.Context){
@@ -116,7 +116,7 @@ func Restart(c *gin.Context){
 	resp := responses.Gin{C: c}
 
 	if req.ServiceName == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空",nil)
 		return
 	}
 
@@ -124,10 +124,10 @@ func Restart(c *gin.Context){
 
 	if err != nil {
 		logger.Error(err.Error())
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		resp.Response(http.StatusOK, exceptions.ERROR, err.Error(),nil)
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
+	resp.Response(http.StatusOK, exceptions.SUCCESS, result,nil)
 }
 
 func Get(c *gin.Context){
@@ -139,15 +139,15 @@ func Get(c *gin.Context){
 	resp := responses.Gin{C: c}
 
 	if req.ServiceName == ""{
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空",nil)
 		return
 	}
 
 	result,err:=service.Get(req);
 	if err != nil {
 		logger.Error(err.Error())
-		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
+		resp.Response(http.StatusOK, exceptions.ERROR, err.Error(),nil)
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
+	resp.Response(http.StatusOK, exceptions.SUCCESS,"SUCCESS", result)
 }

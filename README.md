@@ -3,6 +3,8 @@
 # 参数说明
 * -f app.ini配置文件
 * -kubeConfs kubeconfig目录
+* -log 日志目录
+* -imagePullSecrets 下载镜像密钥
 
 
 # 调用k8s服务部署进行部署删除服务等操作
@@ -10,12 +12,11 @@
 * 删除服务
 * 更新服务
 * 重启服务
-* 更改服务实例数量
-* watch deployment
+* 获取服务
+* 更改实例数量(待完善)
 
 
 # api详解
-
 ## 创建服务
 ```
 curl -X POST -H "Content-Type: application/json"  -d '{
@@ -66,6 +67,35 @@ curl -X PATCH -H "Content-Type: application/json" -d '{
 }' "http://localhost:8080/deploy/service"
 ```
 
+## 获取服务
+### 请求
+```
+curl -X OPTIONS -H "Content-Type: application/json"  -d '{
+    "serviceName":"consul-test",
+    "kubeType":"taoche-test"
+}' "http://192.168.177.224:9000/deploy/service"
+```
+### 响应
+```
+{
+  "code": 200,
+  "data": {
+    "ServiceName": "consul-client",
+    "Image": "consul:1.3.0",
+    "InstanceNum": 3,
+    "Namespace": "default",
+    "Running": true
+  },
+  "msg": "SUCCESS"
+}
+```
+* ServiceName:服务名
+* Image:服务镜像
+* InstanceNum:应启动pod数量
+* Namespace:命名空间
+* Running:运行状态
+
+
 
 # post 请求参数说明
 # 创建及修改 请求参数说明
@@ -84,4 +114,19 @@ curl -X PATCH -H "Content-Type: application/json" -d '{
 |namespace|命名空间|n|default|default|
 |env|容器环境变量|n|{}|{"app":"appname"}
 |nodes|启动容器的节点,与node上的label对应|n|{}|{"attach":"default"}|
+|volume|挂载目录|n|[]|[{"name":"logs","hostPath":"/data1/logs/consul-client/"}]|
+|volumeMount|挂载目录至容器|n|[]|[{"name":"logs","mountPath":"/mnt"}]|
+|ports|端口映射，当该值有值时，port&targetPort失效|n|[]|[{"port":8080,"targetPort":8080}]|
+|args|启动参数|n|[]|["agent","-ui","-client=0.0.0.0","-join=192.168.177.224"]|
 
+# 公共响应结构
+```
+{
+  "code": 500,
+  "data": null,
+  "msg": "镜像不能为空"
+}
+```
+* code: 非200表示失败
+* data: 响应内容
+* msg: code 描述
