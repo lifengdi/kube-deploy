@@ -3,13 +3,13 @@ package service
 
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"kube-deploy/web/responses"
 	"kube-deploy/web/exceptions"
 	"net/http"
 	"kube-deploy/web/reqBody"
 	"kube-deploy/web/service"
+	"kube-deploy/web/logger"
 )
 
 /**
@@ -25,24 +25,25 @@ import (
 func CreateService(c *gin.Context)  {
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println("响应失败")
+		logger.Error("响应失败")
 		return
 	}
 	resp := responses.Gin{C: c}
 
 	if req.Image == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "镜像不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "镜像不能为空")
 		return
 	}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
 		return
 	}
 	println(req.Namespace)
 
 	_,err := service.Create(req)
 	if err != nil {
-		resp.Response(http.StatusInternalServerError, exceptions.ERROR, err.Error())
+		logger.Error(err.Error())
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
 		return
 	}
 	resp.Response(http.StatusOK, exceptions.SUCCESS, "SUCCESS")
@@ -52,20 +53,20 @@ func CreateService(c *gin.Context)  {
 func DeleteService(c *gin.Context){
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println("响应失败")
+		logger.Error("响应失败")
 		return
 	}
 	resp := responses.Gin{C: c}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
 		return
 	}
 
 	result,err:=service.Delete(req);
 
 	if err != nil {
-		resp.Response(http.StatusOK, exceptions.ERROR, nil)
-		panic(err)
+		logger.Error(err.Error())
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
 		return
 	}
 	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
@@ -84,23 +85,23 @@ func DeleteService(c *gin.Context){
 func UpdateService(c *gin.Context){
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println("响应失败")
+		logger.Error("响应失败")
 		return
 	}
 	resp := responses.Gin{C: c}
 	if req.ServiceName == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
 		return
 	}
 	if req.Image == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "镜像不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "镜像不能为空")
 		return
 	}
 	result,err:=service.Update(req);
 
 	if err != nil {
-		resp.Response(http.StatusOK, exceptions.ERROR, nil)
-		panic(err)
+		logger.Error(err.Error())
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
 		return
 	}
 	resp.Response(http.StatusOK, exceptions.SUCCESS, result)
@@ -109,21 +110,21 @@ func UpdateService(c *gin.Context){
 func Restart(c *gin.Context){
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
-		fmt.Println("响应失败")
+		logger.Error("响应失败")
 		return
 	}
 	resp := responses.Gin{C: c}
 
 	if req.ServiceName == ""{
-		resp.Response(http.StatusOK, exceptions.ERROR, "服务名不能为空")
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, "服务名不能为空")
 		return
 	}
 
 	result,err:=service.Restart(req);
 
 	if err != nil {
-		resp.Response(http.StatusOK, exceptions.ERROR, nil)
-		panic(err)
+		logger.Error(err.Error())
+		resp.Response(http.StatusBadRequest, exceptions.ERROR, err.Error())
 		return
 	}
 	resp.Response(http.StatusOK, exceptions.SUCCESS, result)

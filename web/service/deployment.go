@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"kube-deploy/web/reqBody"
 	"k8s.io/client-go/kubernetes"
 	appsv1beta1 "k8s.io/api/apps/v1beta1"
@@ -17,9 +16,6 @@ func createDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceReq
 
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 
-
-
-	fmt.Println("Creating deployment...")
 	_, err := deploymentsClient.Create(getDeployment(request))
 
 	return err;
@@ -27,7 +23,6 @@ func createDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceReq
 
 
 func deleteDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
-	println("namespace:",request.Namespace)
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 
 	deletePolicy := metav1.DeletePropagationForeground
@@ -55,7 +50,6 @@ func restartDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRe
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 	//_,err := deploymentsClient.Update(getDeployment(request))
 	//metav1.
-	println(request.ServiceName)
 	deployment,err := deploymentsClient.Get(request.ServiceName,metav1.GetOptions{})
 	if err!=nil{
 		return err
@@ -76,8 +70,6 @@ func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 	//资源分配会遇到无法设置值的问题，故采用json反解析
 	//j := `{"limits": {"cpu":"2000m", "memory": "1Gi"}, "requests": {"cpu":"2000m", "memory": "1Gi"}}`
 	j := `{"limits": {"cpu":"`+request.LimitCpu+`", "memory": "`+request.LimitMemory+`"}, "requests": {"cpu":"`+request.RequestCpu+`", "memory": "`+request.RequestMemory+`"}}`
-
-	println(j)
 
 	envMap := request.Env;
 	//length:=len(envMap)

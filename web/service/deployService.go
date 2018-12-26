@@ -5,7 +5,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	apiv1 "k8s.io/api/core/v1"
 	"kube-deploy/web/reqBody"
-	"fmt"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"strconv"
 	"strings"
@@ -16,7 +15,6 @@ import (
 	创建service
  */
 func createService(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
-	fmt.Println("createService")
 	_, err:= clientset.CoreV1().Services(request.Namespace).Create(&apiv1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: request.ServiceName,
@@ -72,6 +70,5 @@ func getServicePort(request reqBody.ServiceRequest)[]apiv1.ServicePort{
 			Name: "tcp"+strconv.Itoa(int(request.Port)),
 		})
 	}
-	println("len:",len(request.Ports),"------",len(result))
 	return result;
 }

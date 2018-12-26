@@ -11,6 +11,7 @@ import (
 	"github.com/fvbock/endless"
 	"flag"
 	"kube-deploy/web/config"
+	"kube-deploy/web/logger"
 )
 
 func main() {
@@ -54,18 +55,24 @@ func main() {
 	}
 }
 
-
+// todo 入参有问题
 func initConf(){
 	var kubeConfs string
 	var appConf string
 	var imagePullSecrets string
+	var log string
 
 	flag.StringVar(&kubeConfs, "kubeconfs", "/Users/liukai/go/src/kube-deploy/web/resource/", "kubeconfs dir")
 	flag.StringVar(&appConf, "f", "/Users/liukai/go/src/kube-deploy/web/resource/app.ini", "app.ini path")
 	flag.StringVar(&imagePullSecrets, "imagePullSecrets", "tencent-registry,kanche-registry", "docker image pull secret")
+	flag.StringVar(&log, "log", "/var/log/kubebernetes/kube-deploy/", "log dir")
 
+	println("imagePullSecrets:"+imagePullSecrets)
 	flag.Parse()
 	config.Set("appConf",appConf)
 	config.Set("kubeConfs",kubeConfs)
 	config.Set("imagePullSecrets",imagePullSecrets)
+	//config.Set("log",log)
+	logger.LogDir = log;
+
 }

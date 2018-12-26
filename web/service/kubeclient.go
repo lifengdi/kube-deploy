@@ -2,7 +2,6 @@ package service
 
 import (
 	"os"
-	"fmt"
 	"k8s.io/client-go/tools/clientcmd"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/kubernetes"
@@ -41,7 +40,6 @@ func getKubeClient(configType string)(*restclient.Config, error){
 	根据集群类型获取kubeconfig
  */
 func getKubeConfig(configType string) *string{
-	fmt.Println("getKubeconfig");
 	if configMap[configType] != "" {
 		config := configMap[configType]
 		return &config;
