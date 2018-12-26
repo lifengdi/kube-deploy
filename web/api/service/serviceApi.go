@@ -22,8 +22,6 @@ import (
 		"instanceNum":1
 	}
  */
-// todo 所有的异常返回具体原因
-// todo 挂载目录
 func CreateService(c *gin.Context)  {
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -42,12 +40,12 @@ func CreateService(c *gin.Context)  {
 	}
 	println(req.Namespace)
 
-	data,err := service.Create(req)
+	_,err := service.Create(req)
 	if err != nil {
-		resp.Response(http.StatusOK, exceptions.ERROR, nil)
+		resp.Response(http.StatusInternalServerError, exceptions.ERROR, err.Error())
 		return
 	}
-	resp.Response(http.StatusOK, exceptions.SUCCESS, data)
+	resp.Response(http.StatusOK, exceptions.SUCCESS, "SUCCESS")
 
 }
 

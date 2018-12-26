@@ -39,6 +39,12 @@ func deleteDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceReq
 	return err;
 }
 
+func getK8sDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest)(*appsv1beta1.Deployment,error){
+	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
+	return deploymentsClient.Get(request.ServiceName,metav1.GetOptions{})
+}
+
+
 func updateDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 	_,err := deploymentsClient.Update(getDeployment(request))
@@ -102,18 +108,18 @@ func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 				},
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
-						{   Name:               request.ServiceName,
-							Image:           request.Image,
+						{
+							Name: request.ServiceName,
+							Image: request.Image,
 							Env: envs,
 							Resources: r,
+							VolumeMounts: getVolumeMount(request),
+							Args: request.Args,
 						},
 					},
-					//下载镜像密钥
-					//ImagePullSecrets: []apiv1.LocalObjectReference{
-					//	{Name:config.Get("imagePullSecret")},
-					//},
 					ImagePullSecrets: getImagePullSecrets(),
 					NodeSelector: request.Nodes,
+					Volumes: getVolume(request),
 
 				},
 
@@ -123,7 +129,9 @@ func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 	return deployment;
 }
 
-
+/**
+	获取镜像下载私钥
+ */
 func getImagePullSecrets()[]apiv1.LocalObjectReference{
 	imagePullSecrets := config.Get("imagePullSecrets");
 	secretArr := strings.Split(imagePullSecrets,",")
@@ -131,5 +139,39 @@ func getImagePullSecrets()[]apiv1.LocalObjectReference{
 	for index := range secretArr {
 		result = append(result, apiv1.LocalObjectReference{Name:secretArr[index]})
 	}
+	return result;
+}
+
+/**
+	获取挂载卷
+ */
+func getVolume(request reqBody.ServiceRequest) []apiv1.Volume{
+	var result = []apiv1.Volume{};
+	for index := range request.Volume {
+		result = append(result, apiv1.Volume{
+			Name:request.Volume[index].Name,
+			VolumeSource: apiv1.VolumeSource{
+				HostPath: &apiv1.HostPathVolumeSource{
+					Path:request.Volume[index].HostPath,
+				},
+			},
+		})
+	};
+
+	return result;
+}
+
+/**
+	将挂载卷挂载到容器的某目录
+ */
+func getVolumeMount(request reqBody.ServiceRequest) []apiv1.VolumeMount{
+	var result = []apiv1.VolumeMount{};
+	for index := range request.VolumeMount {
+		result = append(result, apiv1.VolumeMount{
+			Name:request.VolumeMount[index].Name,
+			MountPath: request.VolumeMount[index].MountPath,
+		})
+	};
+
 	return result;
 }

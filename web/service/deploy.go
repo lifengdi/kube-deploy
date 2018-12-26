@@ -3,7 +3,7 @@ package service
 import (
 	"kube-deploy/web/reqBody"
 
-	"time"
+	"errors"
 )
 
 func Create(request reqBody.ServiceRequest)(string,error){
@@ -15,14 +15,21 @@ func Create(request reqBody.ServiceRequest)(string,error){
 		//panic(err.Error())
 		return "false",err;
 	}
-	//删除服务，忽略异常
-	_,err = Delete(request)
 
-	//todo 检查是否仍存在该deployment  如果存在，则休眠5s后再次检查 检查10次后若仍然存在，则返回错误
-	time.Sleep(time.Duration(5)*time.Second)
+	//获取deployment是否存在，如果存在则部署失败
+	deployment,err := getK8sDeployment(clientset,request)
+	if err ==  nil{
+		println(deployment.Name+" deployment not is null")
+		return "服务已存在",errors.New("服务已存在")
+	}
+
+
+	//删除服务，忽略异常
+	//_,err = Delete(request)
+
+	//time.Sleep(time.Duration(5)*time.Second)
 	err = createDeployment(clientset,request);
 	if err != nil {
-		panic(err.Error())
 		return "false",err
 	}
 	err = createService(clientset,request);

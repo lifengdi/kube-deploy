@@ -7,6 +7,8 @@ import (
 	"kube-deploy/web/reqBody"
 	"fmt"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	"strconv"
+	"strings"
 )
 
 
@@ -24,12 +26,7 @@ func createService(clientset *kubernetes.Clientset,request reqBody.ServiceReques
 			Selector: map[string]string{
 				"app": request.ServiceName,
 			},
-			Ports: []apiv1.ServicePort{
-				{
-					Port: request.Port,
-					TargetPort: intstr.FromInt(request.TargetPort),
-				},
-			},
+			Ports: getServicePort(request),
 		},
 	})
 	return err
@@ -43,4 +40,38 @@ func deleteService(clientset *kubernetes.Clientset,request reqBody.ServiceReques
 		PropagationPolicy: &deletePolicy,
 	})
 	return err;
+}
+
+/**
+	获取服务端口映射
+ */
+func getServicePort(request reqBody.ServiceRequest)[]apiv1.ServicePort{
+	var result = []apiv1.ServicePort{}
+
+	if len(request.Ports) > 0{
+		for index := range request.Ports {
+
+			portType := request.Ports[index].Type;
+
+			if portType == ""{
+				portType = "TCP"
+			}
+
+			result = append(result, apiv1.ServicePort{
+				Port: request.Ports[index].Port,
+				TargetPort: intstr.FromInt(request.Ports[index].TargetPort),
+				Protocol: apiv1.Protocol(request.Ports[index].Type),
+				Name: strings.ToLower(portType)+strconv.Itoa(int(request.Ports[index].Port)),
+			})
+		}
+	}else {
+		result = append(result, apiv1.ServicePort{
+			Port: request.Port,
+			TargetPort: intstr.FromInt(request.TargetPort),
+			Protocol: apiv1.Protocol("TCP"),
+			Name: "tcp"+strconv.Itoa(int(request.Port)),
+		})
+	}
+	println("len:",len(request.Ports),"------",len(result))
+	return result;
 }
