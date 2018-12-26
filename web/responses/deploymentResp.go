@@ -1,9 +1,9 @@
 package responses
 
 type DeploymentResp struct {
-	ServiceName string
-	Image string
-	InstanceNum int32
-	Namespace string
-	Running bool
+	ServiceName string `json:"serviceName"`
+	Image string `json:"image"`
+	InstanceNum int32 `json:"instancheNum"`
+	Namespace string `json:"namespace"`
+	Running bool `json:"running"`
 }

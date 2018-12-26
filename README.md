@@ -80,20 +80,20 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 {
   "code": 200,
   "data": {
-    "ServiceName": "consul-client",
-    "Image": "consul:1.3.0",
-    "InstanceNum": 3,
-    "Namespace": "default",
-    "Running": true
+    "serviceName": "consul-client",
+    "image": "consul:1.3.0",
+    "instanceNum": 3,
+    "namespace": "default",
+    "running": true
   },
   "msg": "SUCCESS"
 }
 ```
-* ServiceName:服务名
-* Image:服务镜像
-* InstanceNum:应启动pod数量
-* Namespace:命名空间
-* Running:运行状态
+* serviceName:服务名
+* image:服务镜像
+* instanceNum:应启动pod数量
+* namespace:命名空间
+* running:运行状态
 
 
 
