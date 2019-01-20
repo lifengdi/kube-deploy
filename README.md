@@ -100,7 +100,7 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 # post 请求参数说明
 # 创建及修改 请求参数说明
 |参数|描述|是否必填|默认值|参考值|
-|--|--|--|--|--|--|
+|--|--|--|--|--|
 |serviceName|服务名称|y||nginx|
 |image|服务镜像|y||nginx|
 |port|服务端口|n|8080|8080|
