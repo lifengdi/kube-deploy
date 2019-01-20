@@ -112,12 +112,13 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 |instanceNum|pod实例数量|n|1|3|
 |kubeType|集群类型-用于查找kubeconfig|n|test|test|
 |namespace|命名空间|n|default|default|
-|env|容器环境变量|n|{}|{"app":"appname"}
+|env|容器环境变量|n|{}|{"app":"appname"}|
 |nodes|启动容器的节点,与node上的label对应|n|{}|{"attach":"default"}|
 |volume|挂载目录|n|[]|[{"name":"logs","hostPath":"/data1/logs/consul-client/"}]|
 |volumeMount|挂载目录至容器|n|[]|[{"name":"logs","mountPath":"/mnt"}]|
 |ports|端口映射，当该值有值时，port&targetPort失效|n|[]|[{"port":8080,"targetPort":8080}]|
 |args|启动参数|n|[]|["agent","-ui","-client=0.0.0.0","-join=192.168.177.224"]|
+
 
 # 公共响应结构
 ```
