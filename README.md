@@ -140,7 +140,7 @@ docker build -t   kube-deploy:simple-src-v1.0.0 -f docker/Dockerfile .
 ```
 * run
 ```
-docker run -d --name kube-deploy -e kubeconfs=resource/ -e f=resource/app.ini -e imagePullSecrets=tencent-registry -e log=/var/log/kubebernetes/  kube-deploy:simple-src-v1.0.0
+docker run -d --name kube-deploy -e kubeconfs=web/resource/ -e f=web/resource/app.ini -e imagePullSecrets=tencent-registry -e log=/var/log/kubebernetes/  kube-deploy:simple-src-v1.0.0
 ```
 * 镜像地址
 ```
