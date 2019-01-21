@@ -55,15 +55,15 @@ func main() {
 	}
 }
 
-// todo 入参有问题
+
 func initConf(){
 	var kubeConfs string
 	var appConf string
 	var imagePullSecrets string
 	var log string
 
-	flag.StringVar(&kubeConfs, "kubeconfs", "/Users/liukai/go/src/kube-deploy/web/resource/", "kubeconfs dir")
-	flag.StringVar(&appConf, "f", "/Users/liukai/go/src/kube-deploy/web/resource/app.ini", "app.ini path")
+	flag.StringVar(&kubeConfs, "kubeconfs", "f", "kubeconfs dir")
+	flag.StringVar(&appConf, "f", "resource/app.ini", "app.ini path")
 	flag.StringVar(&imagePullSecrets, "imagePullSecrets", "tencent-registry,kanche-registry", "docker image pull secret")
 	flag.StringVar(&log, "log", "/var/log/kubebernetes/", "log dir")
 
