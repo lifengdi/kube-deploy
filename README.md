@@ -137,20 +137,9 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 ## source image
 * build
 ```
-docker build -t   kube-deploy:simple-src-v1.0.0 -f docker/Dockerfile .
-```
-* run
-```
-docker run -d --name kube-deploy -e kubeconfs=web/resource/ -e f=web/resource/app.ini -e imagePullSecrets=tencent-registry -e log=/var/log/kubebernetes/  kube-deploy:simple-src-v1.0.0
+docker build -t   kube-deploy:simple-v1.0.0 -f docker/ExecDockerfile .
 ```
 * 镜像地址
 ```
-cnkevin/kube-deploy:simple-src-v1.0.0
+https://cloud.docker.com/repository/docker/cnkevin/kube-deploy
 ```
-
-## exec image
-* build
-```
-docker build -t kube-deploy:simple-v1.0.0 -f docker/ExecDockerfile .
-```
-* run
