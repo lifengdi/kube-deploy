@@ -134,6 +134,7 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 
 
 # kube-deploy docker images
+## source image
 * build
 ```
 docker build -t   kube-deploy:simple-src-v1.0.0 -f docker/Dockerfile .
@@ -146,3 +147,10 @@ docker run -d --name kube-deploy -e kubeconfs=web/resource/ -e f=web/resource/ap
 ```
 cnkevin/kube-deploy:simple-src-v1.0.0
 ```
+
+## exec image
+* build
+```
+docker build -t kube-deploy:simple-v1.0.0 -f docker/ExecDockerfile .
+```
+* run

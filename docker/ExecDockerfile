@@ -1,0 +1,27 @@
+FROM docker.io/centos:7
+
+RUN useradd deploy
+
+
+COPY docker/start.sh /home/deploy/
+
+
+COPY web/resource/app.ini /home/deploy/
+
+ENV f=/home/deploy/app.ini
+ENV log=/var/log/kube-deploy/
+
+RUN chmod +x /home/deploy/start.sh
+
+RUN yum install -y wget
+
+RUN wget http://blog.liu-kevin.com/content/images/kube-deploy/kube-deploy-v1.0.0
+
+RUN mv kube-deploy-v1.0.0 /usr/bin/kube-deploy
+RUN chmod +x /usr/bin/kube-deploy
+
+USER deploy
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "/home/deploy/start.sh"]

@@ -1,5 +1,6 @@
+echo "$f"
+echo "$kubeconfs"
+echo "$imagePullSecrets"
+echo "$log"
 
-
-
-
-go run /Users/liukai/go/src/b2c-deploy/web/main.go
+kube-deploy -kubeconfs "$kubeconfs" -f "$f" -imagePullSecrets "$imagePullSecrets" -log "$log"
