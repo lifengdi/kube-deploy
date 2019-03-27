@@ -48,6 +48,7 @@ curl -X DELETE -H "Content-Type: application/json" -d
 ```
 
 ## 更新服务
+整体更新，非只更新参数字段
 ```
 curl -X PUT -H "Content-Type: application/json" -d
 '{
