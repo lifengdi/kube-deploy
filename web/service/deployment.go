@@ -16,7 +16,7 @@ func createDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceReq
 
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
 
-	_, err := deploymentsClient.Create(getDeployment(request))
+	_, err := deploymentsClient.Create(GetDeployment(request))
 
 	return err;
 }
@@ -42,7 +42,7 @@ func getK8sDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceReq
 
 func updateDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRequest) error {
 	deploymentsClient := clientset.AppsV1beta1().Deployments(request.Namespace)
-	_,err := deploymentsClient.Update(getDeployment(request))
+	_,err := deploymentsClient.Update(GetDeployment(request))
 	return err;
 }
 
@@ -65,7 +65,7 @@ func restartDeployment(clientset *kubernetes.Clientset,request reqBody.ServiceRe
 	return err;
 }
 
-func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
+func GetDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 	var r apiv1.ResourceRequirements
 	//资源分配会遇到无法设置值的问题，故采用json反解析
 	//j := `{"limits": {"cpu":"2000m", "memory": "1Gi"}, "requests": {"cpu":"2000m", "memory": "1Gi"}}`
@@ -83,20 +83,23 @@ func getDeployment(request reqBody.ServiceRequest) *appsv1beta1.Deployment{
 	}
 
 	json.Unmarshal([]byte(j), &r)
+	// 向label中添加app
+	if request.Labels==nil{
+		request.Labels = map[string]string{}
+	}
+	request.Labels["app"] = request.ServiceName
 	deployment := &appsv1beta1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: request.ServiceName,
-			Labels: map[string]string{
-				"app": request.ServiceName,
-			},
+			Labels: request.Labels,
+			Annotations:request.Anno,
 		},
 		Spec: appsv1beta1.DeploymentSpec{
 			Replicas: int32Ptr2(request.InstanceNum),
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{
-						"app": request.ServiceName,
-					},
+					Labels: request.Labels,
+					Annotations:request.Anno,
 				},
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{

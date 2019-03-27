@@ -19,6 +19,8 @@ type ServiceRequest struct {
 	VolumeMount []VolumeMount
 	Ports []PortMap  // 多端口映射
 	Args []string  // 启动参数
+	Labels map[string]string
+	Anno map[string]string //标注
 
 }
 
@@ -55,5 +57,7 @@ func InitServiceRequest()ServiceRequest{
 	request.VolumeMount = []VolumeMount{}
 	request.Ports = []PortMap{}
 	request.Args = []string{}
+	request.Labels = map[string]string{}
+	request.Anno = map[string]string{}
 	return request
 }
