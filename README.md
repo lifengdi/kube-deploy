@@ -4,7 +4,7 @@
 * -f app.ini配置文件
 * -kubeConfs kubeconfig目录
 * -log 日志目录
-* -imagePullSecrets 下载镜像密钥
+* -imagePullSecrets 下载镜像密钥   [参考](https://blog.liu-kevin.com/2019/03/14/13-k8s/)
 
 # 启动方式
 ```
