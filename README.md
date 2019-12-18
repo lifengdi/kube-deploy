@@ -6,6 +6,12 @@
 * -log 日志目录
 * -imagePullSecrets 下载镜像密钥
 
+# 启动方式
+```
+nohup /usr/bin/kube-deploy -f /etc/kubernetes/deploy/app.ini -kubeconfs /etc/kubernetes/deploy/ -imagePullSecrets tencent-registry,kanche-registry -log /var/log/kubernetes/ &
+```
+* `/etc/kubernetes/deploy/`中需要存在kube-config文件及该文件所需要的ca.crt文件
+* kube-config文件的命名为请求参数中的kubeType-kubeconfig
 
 # 调用k8s服务部署进行部署删除服务等操作
 * 创建服务
