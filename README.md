@@ -148,5 +148,5 @@ docker build -t   kube-deploy:simple-v1.0.0 -f docker/ExecDockerfile .
 ```
 * 镜像地址
 ```
-https://cloud.docker.com/repository/docker/cnkevin/kube-deploy
+https://hub.docker.com/r/cnkevin/kube-deploy
 ```
