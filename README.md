@@ -31,11 +31,11 @@ curl -X POST -H "Content-Type: application/json"  -d '{
     "port":80,
     "targetPort":80,
     "requestCpu":"0.5",
-    "requestMemory":"1Gi"
+    "requestMemory":"1Gi",
     "instanceNum":3,
     "kubeType":"test",
     "namespace":"default",
-    "limitCpu":1,
+    "limitCpu":"1",
     "limitMemory":"2Gi",
     "env":{
             "app":"appname"
