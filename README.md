@@ -4,8 +4,14 @@
 * -f app.ini配置文件
 * -kubeConfs kubeconfig目录
 * -log 日志目录
-* -imagePullSecrets 下载镜像密钥
+* -imagePullSecrets 下载镜像密钥   [参考](https://blog.liu-kevin.com/2019/03/14/13-k8s/)
 
+# 启动方式
+```
+nohup /usr/bin/kube-deploy -f /etc/kubernetes/deploy/app.ini -kubeconfs /etc/kubernetes/deploy/ -imagePullSecrets tencent-registry,kanche-registry -log /var/log/kubernetes/ &
+```
+* `/etc/kubernetes/deploy/`中需要存在kube-config文件及该文件所需要的ca.crt文件
+* kube-config文件的命名为请求参数中的kubeType-kubeconfig
 
 # 调用k8s服务部署进行部署删除服务等操作
 * 创建服务
@@ -25,11 +31,11 @@ curl -X POST -H "Content-Type: application/json"  -d '{
     "port":80,
     "targetPort":80,
     "requestCpu":"0.5",
-    "requestMemory":"1Gi"
+    "requestMemory":"1Gi",
     "instanceNum":3,
     "kubeType":"test",
     "namespace":"default",
-    "limitCpu":1,
+    "limitCpu":"1",
     "limitMemory":"2Gi",
     "env":{
             "app":"appname"
@@ -143,5 +149,5 @@ docker build -t   kube-deploy:simple-v1.0.0 -f docker/ExecDockerfile .
 ```
 * 镜像地址
 ```
-https://cloud.docker.com/repository/docker/cnkevin/kube-deploy
+https://hub.docker.com/r/cnkevin/kube-deploy
 ```
