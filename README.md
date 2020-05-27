@@ -118,6 +118,7 @@ curl -X OPTIONS -H "Content-Type: application/json"  -d '{
 |volume|挂载目录|n|[]|[{"name":"logs","hostPath":"/data1/logs/consul-client/"}]|
 |volumeMount|挂载目录至容器|n|[]|[{"name":"logs","mountPath":"/mnt"}]|
 |ports|端口映射，当该值有值时，port&targetPort失效|n|[]|[{"port":8080,"targetPort":8080}]|
+|probe|探活配置|否|{"DelaySeconds":60,"PeriodSeconds":5,"FailureThreshold":1,"SuccessThreshold":1,"Timeout":5}|{"DelaySeconds":60,"PeriodSeconds":5,"FailureThreshold":1,"SuccessThreshold":1,"Timeout":5}|
 |args|启动参数|n|[]|["agent","-ui","-client=0.0.0.0","-join=192.168.177.224"]|
 
 

@@ -10,6 +10,7 @@ import (
 	"kube-deploy/web/reqBody"
 	"kube-deploy/web/service"
 	"kube-deploy/web/logger"
+	"fmt"
 )
 
 /**
@@ -23,9 +24,10 @@ import (
 	}
  */
 func CreateService(c *gin.Context)  {
+	fmt.Println("create")
 	req := reqBody.InitServiceRequest()
 	if err := c.ShouldBindJSON(&req); err != nil {
-		logger.Error("响应失败")
+		logger.Error("响应失败:"+err.Error())
 		return
 	}
 	resp := responses.Gin{C: c}

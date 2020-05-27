@@ -1,63 +1,77 @@
 package reqBody
 
-
 type ServiceRequest struct {
-	ServiceName string// 服务名称
-	InstanceNum int32 // 实例数量
-	Image string  // 镜像
-	Port int32  // pod端口
-	TargetPort int  // 容器端口
-	KubeType string  // 集群类型
-	Namespace string  // 命名空间
-	LimitCpu string // cpu
-	LimitMemory string  // 内存
-	RequestCpu string
+	ServiceName   string // 服务名称
+	InstanceNum   int32  // 实例数量
+	Image         string // 镜像
+	Port          int32  // pod端口
+	TargetPort    int    // 容器端口
+	KubeType      string // 集群类型
+	Namespace     string // 命名空间
+	LimitCpu      string // cpu
+	LimitMemory   string // 内存
+	RequestCpu    string
 	RequestMemory string
-	Env map[string]string  // 环境变量
-	Nodes map[string]string  // 部署节点
-	Volume []Volume   // 挂载目录
-	VolumeMount []VolumeMount
-	Ports []PortMap  // 多端口映射
-	Args []string  // 启动参数
-	Labels map[string]string
-	Anno map[string]string //标注
-
+	Env           map[string]string // 环境变量
+	Nodes         map[string]string // 部署节点
+	Volume        []Volume          // 挂载目录
+	VolumeMount   []VolumeMount
+	Ports         []PortMap // 多端口映射
+	Args          []string  // 启动参数
+	Labels        map[string]string
+	Anno          map[string]string //标注
+	Probe         Probe
 }
 
-type PortMap struct{
-	Port int32
+type Probe struct {
+	DelaySeconds     int32
+	PeriodSeconds    int32
+	FailureThreshold int32
+	SuccessThreshold int32
+	Timeout int32
+}
+
+type PortMap struct {
+	Port       int32
 	TargetPort int
-	Type string "TCP"
+	Type       string "TCP"
 }
 
 type Volume struct {
-	Name string
+	Name     string
 	HostPath string
 }
 
-type VolumeMount struct{
-	Name string
+type VolumeMount struct {
+	Name      string
 	MountPath string
 }
 
-func InitServiceRequest()ServiceRequest{
+func InitServiceRequest() ServiceRequest {
 	var request ServiceRequest
 	request.Port = 8080
-	request.TargetPort=8080
-	request.Namespace="default"
-	request.InstanceNum= 1
-	request.KubeType="test"
-	request.RequestCpu= "0.2"
-	request.LimitCpu="1"
-	request.RequestMemory="1Gi"
-	request.LimitMemory="2Gi"
-	request.Env = map[string] string{}
-	request.Nodes = map[string] string{}
+	request.TargetPort = 8080
+	request.Namespace = "default"
+	request.InstanceNum = 1
+	request.KubeType = "test"
+	request.RequestCpu = "0.2"
+	request.LimitCpu = "1"
+	request.RequestMemory = "1Gi"
+	request.LimitMemory = "2Gi"
+	request.Env = map[string]string{}
+	request.Nodes = map[string]string{}
 	request.Volume = []Volume{}
 	request.VolumeMount = []VolumeMount{}
 	request.Ports = []PortMap{}
 	request.Args = []string{}
 	request.Labels = map[string]string{}
 	request.Anno = map[string]string{}
+	request.Probe = Probe{
+		DelaySeconds:     60,
+		Timeout: 5,
+		PeriodSeconds:    5,
+		FailureThreshold: 1,
+		SuccessThreshold: 1,
+	}
 	return request
 }
