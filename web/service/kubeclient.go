@@ -47,8 +47,8 @@ func getKubeConfig(configType string) *string{
 	//var kubeconfig *string
 	configName := configType
 	configName = configName + "-kubeconfig"
-	//kubeconfig = flag.String("kubeconfig", filepath.Join(home, "/src/kube-deploy/web/resource", configName), "(optional) absolute path to the taoche-test-kubeconfig file")
-	//kubeconfig = flag.String("kubeconfig", filepath.Join(config.Get("kubeconfs"), configName), "(optional) absolute path to the taoche-test-kubeconfig file")
+	//kubeconfig = flag.String("kubeconfig", filepath.Join(home, "/src/kube-deploy/web/resource", configName), "(optional) absolute path to the taoche-taoche-test-kubeconfig file")
+	//kubeconfig = flag.String("kubeconfig", filepath.Join(config.Get("kubeconfs"), configName), "(optional) absolute path to the taoche-taoche-test-kubeconfig file")
 	//println(kubeconfig)
 	//flag.Parse()
 	kubeconfig := config.Get("kubeConfs")+configName
